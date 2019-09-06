@@ -31,12 +31,12 @@ ENV PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}
 
 # Use the distro's package manager to isntall the required bits, including i386 libraries and
 # download the Android SDK distribution, setup all the required files and directories, install
-# the SDK and build tools with the Android SDK manager and cleanup once the install is complete.
+# the SDK.
 RUN dpkg --add-architecture i386 && \
     apt-get update -qq && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y -qq \
     libc6:i386 libstdc++6:i386 libgcc1:i386 libncurses5:i386 libz1:i386 \
-    openjdk-8-jdk wget unzip bash openssl < /dev/null > /dev/null && \
+    openjdk-8-jdk wget unzip bash openssl && \
     apt-get clean && \
     cd /opt && \
     wget -q https://dl.google.com/android/repository/${SDK_TOOLS_DIST} -O android-sdk-tools.zip && \
@@ -46,8 +46,10 @@ RUN dpkg --add-architecture i386 && \
     touch repositories.cfg && \
     cd /opt && \
     unzip -q android-sdk-tools.zip -d ${ANDROID_HOME} && \
-    rm -f android-sdk-tools.zip && \
-    yes | sdkmanager --licenses > /dev/null && \
+    rm -f android-sdk-tools.zip
+
+# Install the build tools wit`h the Android SDK manager.
+RUN yes | sdkmanager --licenses && \
     sdkmanager --update && \
     sdkmanager "build-tools;19.1.0" \
     "build-tools;20.0.0" \

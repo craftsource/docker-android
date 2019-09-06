@@ -26,7 +26,7 @@ jobs:
     - stage: build
       script:
         - echo "$DOCKER_PASSWORD" | docker login -u craftsource --password-stdin
-        - docker build -t craftsource/android:1.0.0 .
+        - docker build --quiet --tag craftsource/android:1.0.0 .
         - docker tag craftsource/android:1.0.0 craftsource/android:latest
         - docker push craftsource/android:1.0.0
         - docker push craftsource/android:latest
