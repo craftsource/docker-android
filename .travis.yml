@@ -37,3 +37,4 @@ jobs:
     - stage: test
       script:
         - docker run --rm craftsource/android:latest sh
+        - docker run --rm craftsource/android-aws:latest sh
