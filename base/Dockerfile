@@ -21,6 +21,8 @@
 # SOFTWARE.
 FROM debian:stretch
 
+LABEL maintainer="lehn.todd@gmail.com"
+
 # Setup the enviornment. Each value can be overridden by setting the enviornment
 # at runtime.
 ENV SDK_VERSION=29.0.2 \

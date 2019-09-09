@@ -19,21 +19,12 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-dist: trusty
+FROM craftsource/android:1.0.0
 
-jobs:
-  include:
-    - stage: build
-      script:
-        - echo "$DOCKER_PASSWORD" | docker login -u craftsource --password-stdin
-        - docker build --quiet --tag craftsource/android:1.0.0 base
-        - docker build --quiet --tag craftsource/android-aws:1.0.0 awscli
-        - docker tag craftsource/android:1.0.0 craftsource/android:latest
-        - docker tag craftsource/android-aws:1.0.0 craftsource/android-aws:latest
-        - docker push craftsource/android:1.0.0
-        - docker push craftsource/android:latest
-        - docker push craftsource/android-aws:1.0.0
-        - docker push craftsource/android-aws:latest
-    - stage: test
-      script:
-        - docker run --rm craftsource/android:latest sh
+LABEL maintainer="lehn.todd@gmail.com"
+
+RUN apt-get update -qq && \
+    apt-get install -y -qq python3 python3-pip && \
+    apt-get clean
+
+RUN pip3 install --no-cache-dir --upgrade pip setuptools awscli==1.16.235
